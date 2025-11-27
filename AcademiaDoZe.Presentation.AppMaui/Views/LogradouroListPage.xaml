@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" xmlns:vm="clr-namespace:AcademiaDoZe.Presentation.AppMaui.ViewModels" xmlns:dto="clr-namespace:AcademiaDoZe.Application.DTOs;assembly=AcademiaDoZe.Application" x:Class="AcademiaDoZe.Presentation.AppMaui.Views.LogradouroListPage" x:DataType="vm:LogradouroListViewModel" Title="{Binding Title}">
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui" 
+xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+xmlns:vm="clr-namespace:AcademiaDoZe.Presentation.AppMaui.ViewModels" 
+xmlns:dto="clr-namespace:AcademiaDoZe.Application.DTOs;assembly=AcademiaDoZe.Application" 
+x:Class="AcademiaDoZe.Presentation.AppMaui.Views.LogradouroListPage" 
+x:DataType="vm:LogradouroListViewModel" Title="{Binding Title}">
 	<Grid RowDefinitions="Auto,*">
-
+		<!-- Barra de busca -->
 		<Border Grid.Row="0" Style="{StaticResource CardBorder}" Margin="15,10">
 			<Grid ColumnDefinitions="Auto,10,*,10,Auto" VerticalOptions="Center">
 				<Picker Grid.Column="0" ItemsSource="{Binding FilterTypes}" SelectedItem="{Binding SelectedFilterType}" WidthRequest="110" HeightRequest="40"/>
@@ -9,7 +14,7 @@
 				<Button Grid.Column="4" Text="Buscar" Style="{StaticResource ButtonPrimary}" WidthRequest="80" HeightRequest="40" Command="{Binding SearchLogradourosCommand}"/>
 			</Grid>
 		</Border>
-
+		<!-- Lista -->
 		<Grid Grid.Row="1">
 			<RefreshView IsRefreshing="{Binding IsRefreshing}" Command="{Binding RefreshCommand}">
 				<CollectionView ItemsSource="{Binding Logradouros}" SelectionMode="None">
@@ -46,14 +51,14 @@
 					</CollectionView.ItemTemplate>
 				</CollectionView>
 			</RefreshView>
-
+			<!-- Botão flutuante -->
 			<Button Text="+" Command="{Binding AddLogradouroCommand}" Style="{StaticResource ButtonPrimary}" WidthRequest="56" HeightRequest="56" HorizontalOptions="End" VerticalOptions="End" Margin="20">
 				<Button.Shadow>
 					<Shadow Brush="{AppThemeBinding Light=Black, Dark=Gray}" Offset="0,4" Radius="8" Opacity="0.3"/>
 				</Button.Shadow>
 			</Button>
 		</Grid>
-
+		<!-- Loading -->
 		<ActivityIndicator Grid.Row="0" Grid.RowSpan="2" IsVisible="{Binding IsBusy}" IsRunning="{Binding IsBusy}"/>
 	</Grid>
 </ContentPage>
