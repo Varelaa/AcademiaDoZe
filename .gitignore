@@ -1,0 +1,48 @@
+## Visual Studio
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+## Build results
+bin/
+obj/
+out/
+
+## .NET Core
+project.lock.json
+project.fragment.lock.json
+artifacts/
+
+## Visual Studio caches
+*.vsidx
+*.cache
+*.db
+
+## NuGet
+*.nupkg
+packages/
+*.snupkg
+
+## Logs
+*.log
+
+## Temp files
+*.tmp
+*.temp
+
+## Resharper
+_ReSharper*/
+*.[Rr]e[Ss]harper
+
+## Rider
+.idea/
+
+## Others
+*.pdb
+*.mdb
+*.mp4
+*.zip
+*.exe
+*.dll
