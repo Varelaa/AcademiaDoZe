@@ -1,6 +1,4 @@
-﻿//Gabriel Souza Varela
-
-using AcademiaDoZe.Application.DTOs;
+﻿using AcademiaDoZe.Application.DTOs;
 using AcademiaDoZe.Presentation.AppMaui.ViewModels;
 namespace AcademiaDoZe.Presentation.AppMaui.Views;
 public partial class LogradouroListPage : ContentPage

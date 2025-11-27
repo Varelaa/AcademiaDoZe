@@ -1,117 +1,59 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui" 
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
-             x:Class="AcademiaDoZe.Presentation.AppMaui.Views.LogradouroListPage" 
-             xmlns:vm="clr-namespace:AcademiaDoZe.Presentation.AppMaui.ViewModels" 
-             xmlns:dto="clr-namespace:AcademiaDoZe.Application.DTOs;assembly=AcademiaDoZe.Application" 
-             x:DataType="vm:LogradouroListViewModel" 
-             Title="{Binding Title}">
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" xmlns:vm="clr-namespace:AcademiaDoZe.Presentation.AppMaui.ViewModels" xmlns:dto="clr-namespace:AcademiaDoZe.Application.DTOs;assembly=AcademiaDoZe.Application" x:Class="AcademiaDoZe.Presentation.AppMaui.Views.LogradouroListPage" x:DataType="vm:LogradouroListViewModel" Title="{Binding Title}">
+	<Grid RowDefinitions="Auto,*">
 
-    <Grid RowDefinitions="Auto,*">
+		<Border Grid.Row="0" Style="{StaticResource CardBorder}" Margin="15,10">
+			<Grid ColumnDefinitions="Auto,10,*,10,Auto" VerticalOptions="Center">
+				<Picker Grid.Column="0" ItemsSource="{Binding FilterTypes}" SelectedItem="{Binding SelectedFilterType}" WidthRequest="110" HeightRequest="40"/>
+				<Entry Grid.Column="2" Text="{Binding SearchText}" Placeholder="Digite o valor..." HeightRequest="40"/>
+				<Button Grid.Column="4" Text="Buscar" Style="{StaticResource ButtonPrimary}" WidthRequest="80" HeightRequest="40" Command="{Binding SearchLogradourosCommand}"/>
+			</Grid>
+		</Border>
 
-        <!-- Search Bar com Picker de filtro -->
-        <Border Grid.Row="0" Style="{StaticResource CardBorder}" Margin="15,10">
-            <Grid ColumnDefinitions="Auto,10,*,10,Auto" VerticalOptions="Center">
-                <Picker Grid.Column="0"
-                        Title=""
-                        ItemsSource="{Binding FilterTypes}"
-                        SelectedItem="{Binding SelectedFilterType}"
-                        WidthRequest="110"
-                        HorizontalOptions="Start"
-                        HeightRequest="40"
-                        VerticalOptions="Center"/>
-                <Entry Grid.Column="2"
-                       Text="{Binding SearchText}"
-                       Placeholder="Digite o valor..."
-                       HeightRequest="40"
-                       VerticalOptions="Center"/>
-                <Button Grid.Column="4"
-                        Text="Buscar"
-                        Style="{StaticResource ButtonPrimary}"
-                        FontSize="14"
-                        WidthRequest="80"
-                        HeightRequest="40"
-                        Command="{Binding SearchLogradourosCommand}"/>
-            </Grid>
-        </Border>
+		<Grid Grid.Row="1">
+			<RefreshView IsRefreshing="{Binding IsRefreshing}" Command="{Binding RefreshCommand}">
+				<CollectionView ItemsSource="{Binding Logradouros}" SelectionMode="None">
+					<CollectionView.EmptyView>
+						<StackLayout VerticalOptions="Center">
+							<Label Text="Nenhum logradouro encontrado" HorizontalOptions="Center" Style="{StaticResource SubHeadline}"/>
+							<Button Text="Adicionar Primeiro Logradouro" Command="{Binding AddLogradouroCommand}" Style="{StaticResource ButtonPrimary}" HeightRequest="50" Margin="0,20,0,0"/>
+						</StackLayout>
+					</CollectionView.EmptyView>
+					<CollectionView.ItemTemplate>
+						<DataTemplate x:DataType="dto:LogradouroDTO">
+							<Grid Padding="1" Margin="5">
+								<Border Style="{StaticResource CardBorder}" Margin="10">
+									<Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="*,Auto,Auto">
+										<Label Grid.Row="0" Grid.Column="0" Text="{Binding Cep}" FontAttributes="Bold"/>
+										<Label Grid.Row="1" Text="{Binding Nome}"/>
+										<Label Grid.Row="2" Text="{Binding Bairro}"/>
+										<Label Grid.Row="3">
+											<Label.FormattedText>
+												<FormattedString>
+													<Span Text="{Binding Cidade}"/>
+													<Span Text=" - "/>
+													<Span Text="{Binding Estado}"/>
+												</FormattedString>
+											</Label.FormattedText>
+										</Label>
+										<Label Grid.Row="4" Text="{Binding Pais}"/>
+										<Button Grid.Row="0" Grid.Column="1" Text="Editar" Style="{StaticResource ButtonSmall}" Clicked="OnEditButtonClicked"/>
+										<Button Grid.Row="0" Grid.Column="2" Text="Excluir" Style="{StaticResource ButtonDanger}" Clicked="OnDeleteButtonClicked"/>
+									</Grid>
+								</Border>
+							</Grid>
+						</DataTemplate>
+					</CollectionView.ItemTemplate>
+				</CollectionView>
+			</RefreshView>
 
-        <!-- Lista de Logradouros -->
-        <RefreshView Grid.Row="1"
-                     IsRefreshing="{Binding IsRefreshing}"
-                     Command="{Binding RefreshCommand}">
-            <CollectionView ItemsSource="{Binding Logradouros}" SelectionMode="None">
-                <CollectionView.EmptyView>
-                    <StackLayout VerticalOptions="Center">
-                        <Label Text="Nenhum logradouro encontrado"
-                               HorizontalOptions="Center"
-                               Style="{StaticResource SubHeadline}"/>
-                        <Button Text="Adicionar Primeiro Logradouro"
-                                Command="{Binding AddLogradouroCommand}"
-                                Style="{StaticResource ButtonPrimary}"
-                                HeightRequest="50"
-                                Margin="0,20,0,0"/>
-                    </StackLayout>
-                </CollectionView.EmptyView>
+			<Button Text="+" Command="{Binding AddLogradouroCommand}" Style="{StaticResource ButtonPrimary}" WidthRequest="56" HeightRequest="56" HorizontalOptions="End" VerticalOptions="End" Margin="20">
+				<Button.Shadow>
+					<Shadow Brush="{AppThemeBinding Light=Black, Dark=Gray}" Offset="0,4" Radius="8" Opacity="0.3"/>
+				</Button.Shadow>
+			</Button>
+		</Grid>
 
-                <CollectionView.ItemTemplate>
-                    <DataTemplate x:DataType="dto:LogradouroDTO">
-                        <Grid Padding="1" Margin="5">
-                            <Border Style="{StaticResource CardBorder}" Margin="10">
-                                <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto"
-                                      ColumnDefinitions="*,Auto,Auto">
-                                    <Label Grid.Row="0" Grid.Column="0" Text="{Binding Cep}" FontAttributes="Bold"/>
-                                    <Label Grid.Row="1" Grid.Column="0" Text="{Binding Nome}"/>
-                                    <Label Grid.Row="2" Grid.Column="0" Text="{Binding Bairro}"/>
-                                    <Label Grid.Row="3" Grid.Column="0">
-                                        <Label.FormattedText>
-                                            <FormattedString>
-                                                <Span Text="{Binding Cidade}"/>
-                                                <Span Text=" - "/>
-                                                <Span Text="{Binding Estado}"/>
-                                            </FormattedString>
-                                        </Label.FormattedText>
-                                    </Label>
-                                    <Label Grid.Row="4" Grid.Column="0" Text="{Binding Pais}"/>
-
-                                    <!-- Botões -->
-                                    <Button Grid.Row="0" Grid.Column="1"
-                                            Text="Editar"
-                                            Style="{StaticResource ButtonSmall}"
-                                            Margin="4,0"
-                                            Clicked="OnEditButtonClicked"/>
-                                    <Button Grid.Row="0" Grid.Column="2"
-                                            Text="Excluir"
-                                            Style="{StaticResource ButtonDanger}"
-                                            Margin="4,0"
-                                            Clicked="OnDeleteButtonClicked"/>
-                                </Grid>
-                            </Border>
-                        </Grid>
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
-            </CollectionView>
-        </RefreshView>
-
-        <!-- FAB (Floating Action Button) -->
-        <Button Text="+"
-                Command="{Binding AddLogradouroCommand}"
-                Style="{StaticResource ButtonPrimary}"
-                WidthRequest="56"
-                HeightRequest="56"
-                HorizontalOptions="End"
-                VerticalOptions="End"
-                Margin="20">
-            <Button.Shadow>
-                <Shadow Brush="{AppThemeBinding Light=Black, Dark=Gray}" Offset="0,4" Radius="8" Opacity="0.3"/>
-            </Button.Shadow>
-        </Button>
-
-        <!-- Loading Indicator -->
-        <ActivityIndicator Grid.Row="0" Grid.RowSpan="2"
-                           IsVisible="{Binding IsBusy}"
-                           IsRunning="{Binding IsBusy}"
-                           VerticalOptions="Center"
-                           HorizontalOptions="Center"/>
-
-    </Grid>
+		<ActivityIndicator Grid.Row="0" Grid.RowSpan="2" IsVisible="{Binding IsBusy}" IsRunning="{Binding IsBusy}"/>
+	</Grid>
 </ContentPage>

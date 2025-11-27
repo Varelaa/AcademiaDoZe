@@ -1,26 +1,38 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<ContentPage
-    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:vm="clr-namespace:AcademiaDoZe.Presentation.AppMaui.ViewModels"
-    x:Class="AcademiaDoZe.Presentation.AppMaui.Views.DashboardListPage"
-    x:DataType="vm:DashboardListViewModel"
-    Title="{Binding Title}">
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+             xmlns:vm="clr-namespace:AcademiaDoZe.Presentation.AppMaui.ViewModels" 
+             x:Class="AcademiaDoZe.Presentation.AppMaui.Views.DashboardListPage" 
+             x:DataType="vm:DashboardListViewModel"
+             Title="{Binding Title}">
 
     <ScrollView>
         <Grid RowDefinitions="Auto,*">
+
             <!-- Header -->
             <StackLayout Spacing="10" Margin="0,0,0,20">
-                <Image Source="academiadoze.png" HorizontalOptions="Center" HeightRequest="200" WidthRequest="200"/>
-                <Label Text="Academia do Zé" Style="{StaticResource Headline}"/>
-                <Label Text="Sistema de Gerenciamento" Style="{StaticResource SubHeadline}"/>
+                <Image Source="academiadoze.png"
+                       HorizontalOptions="Center"
+                       VerticalOptions="Start"
+                       HeightRequest="200"
+                       WidthRequest="200" />
+
+                <Label Text="Academia do Zé" Style="{StaticResource Headline}" />
+                <Label Text="Sistema de Gerenciamento" Style="{StaticResource SubHeadline}" />
             </StackLayout>
 
+
             <!-- Cards Container -->
-            <Grid Grid.Row="1" RowDefinitions="Auto,Auto" ColumnDefinitions="*,*" RowSpacing="15" ColumnSpacing="15">
-                
+            <Grid Grid.Row="1"
+                  RowDefinitions="Auto,Auto"
+                  ColumnDefinitions="*,*"
+                  RowSpacing="15"
+                  ColumnSpacing="15">
+
                 <!-- Card Logradouros -->
-                <Border Grid.Row="0" Grid.Column="0" Style="{StaticResource CardBorder}">
+                <Border Grid.Row="0" Grid.Column="0"
+                        Style="{StaticResource CardBorder}"
+                        Margin="15,10">
                     <Border.GestureRecognizers>
                         <TapGestureRecognizer Command="{Binding NavigateToLogradourosCommand}"/>
                     </Border.GestureRecognizers>
@@ -31,7 +43,9 @@
                 </Border>
 
                 <!-- Card Alunos -->
-                <Border Grid.Row="0" Grid.Column="1" Style="{StaticResource CardBorder}">
+                <Border Grid.Row="0" Grid.Column="1"
+                        Style="{StaticResource CardBorder}"
+                        Margin="15,10">
                     <Border.GestureRecognizers>
                         <TapGestureRecognizer Command="{Binding NavigateToAlunosCommand}"/>
                     </Border.GestureRecognizers>
@@ -42,7 +56,9 @@
                 </Border>
 
                 <!-- Card Colaboradores -->
-                <Border Grid.Row="1" Grid.Column="0" Style="{StaticResource CardBorder}">
+                <Border Grid.Row="1" Grid.Column="0"
+                        Style="{StaticResource CardBorder}"
+                        Margin="15,10">
                     <Border.GestureRecognizers>
                         <TapGestureRecognizer Command="{Binding NavigateToColaboradoresCommand}"/>
                     </Border.GestureRecognizers>
@@ -53,7 +69,9 @@
                 </Border>
 
                 <!-- Card Matrículas -->
-                <Border Grid.Row="1" Grid.Column="1" Style="{StaticResource CardBorder}">
+                <Border Grid.Row="1" Grid.Column="1"
+                        Style="{StaticResource CardBorder}"
+                        Margin="15,10">
                     <Border.GestureRecognizers>
                         <TapGestureRecognizer Command="{Binding NavigateToMatriculasCommand}"/>
                     </Border.GestureRecognizers>
@@ -66,8 +84,12 @@
             </Grid>
 
             <!-- Loading Indicator -->
-            <ActivityIndicator Grid.Row="0" Grid.RowSpan="2" IsVisible="{Binding IsBusy}" IsRunning="{Binding IsBusy}" VerticalOptions="Center" HorizontalOptions="Center"/>
-
+            <ActivityIndicator Grid.Row="0"
+                               Grid.RowSpan="2"
+                               IsVisible="{Binding IsBusy}"
+                               IsRunning="{Binding IsBusy}"
+                               VerticalOptions="Center"
+                               HorizontalOptions="Center"/>
         </Grid>
     </ScrollView>
 

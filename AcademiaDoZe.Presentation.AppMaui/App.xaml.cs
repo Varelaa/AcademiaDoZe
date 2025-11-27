@@ -1,6 +1,4 @@
-﻿//Gabriel Souza Varela
-
-namespace AcademiaDoZe.Presentation.AppMaui
+﻿namespace AcademiaDoZe.Presentation.AppMaui
 {
     // Application conflita com o nome da nossa camada de aplicação
     // Incluir o namespace completo, Microsoft.Maui.Controls.Application, para evitar conflito
