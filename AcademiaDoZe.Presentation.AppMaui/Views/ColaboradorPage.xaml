@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage
     x:Class="AcademiaDoZe.Presentation.AppMaui.Views.ColaboradorPage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
@@ -8,11 +7,11 @@
     <ScrollView>
         <VerticalStackLayout Padding="20" Spacing="10">
 
-            <Label Text="CPF" />
-            <Entry Text="{Binding Colaborador.Cpf}" Keyboard="Numeric" />
-
             <Label Text="Nome" />
             <Entry Text="{Binding Colaborador.Nome}" />
+
+            <Label Text="CPF" />
+            <Entry Text="{Binding Colaborador.Cpf}" Keyboard="Numeric" />
 
             <Label Text="Telefone" />
             <Entry Text="{Binding Colaborador.Telefone}" Keyboard="Telephone" />
@@ -21,10 +20,20 @@
             <Entry Text="{Binding Colaborador.Email}" Keyboard="Email" />
 
             <Label Text="Data de Nascimento" />
-            <DatePicker Date="{Binding DataNascimentoDate}" />
+            <DatePicker Date="{Binding Colaborador.DataNascimento}" />
 
             <Label Text="Data de Admissão" />
-            <DatePicker Date="{Binding DataAdmissaoDate}" />
+            <DatePicker Date="{Binding Colaborador.DataAdmissao}" />
+
+            <Label Text="Senha" />
+            <Entry IsPassword="True" Text="{Binding Colaborador.Senha}" />
+
+            <Label Text="Logradouro" />
+            <Picker
+                Title="Selecione"
+                ItemsSource="{Binding Logradouros}"
+                ItemDisplayBinding="{Binding Nome}"
+                SelectedItem="{Binding SelectedLogradouro}" />
 
             <Label Text="Número" />
             <Entry Text="{Binding Colaborador.Numero}" />
@@ -32,24 +41,33 @@
             <Label Text="Complemento" />
             <Entry Text="{Binding Colaborador.Complemento}" />
 
-            <!-- BOTÃO SALVAR -->
-            <!-- BOTÃO SALVAR -->
-            <Button Text="Salvar"
-                    Clicked="OnSalvarClicked"
-                    BackgroundColor="#2196F3"
-                    TextColor="White"
-                    CornerRadius="8"
-                    HeightRequest="45" />
+            <Label Text="Tipo" />
+            <Picker
+                ItemsSource="{Binding Tipos}"
+                SelectedItem="{Binding Colaborador.Tipo}" />
 
+            <Label Text="Vínculo" />
+            <Picker
+                ItemsSource="{Binding Vinculos}"
+                SelectedItem="{Binding Colaborador.Vinculo}" />
+
+            <!-- BOTÃO SALVAR -->
+            <Button
+                Text="Salvar"
+                Command="{Binding SaveColaboradorAsyncCommand}"
+                BackgroundColor="#2196F3"
+                TextColor="White"
+                CornerRadius="8"
+                HeightRequest="45" />
 
             <!-- BOTÃO CANCELAR -->
-            <Button Text="Cancelar"
-                    Clicked="OnCancelarClicked"
-                    BackgroundColor="#E53935"
-                    TextColor="White"
-                    CornerRadius="8"
-                    HeightRequest="45" />
-
+            <Button
+                Text="Cancelar"
+                Command="{Binding CancelAsyncCommand}"
+                BackgroundColor="#E53935"
+                TextColor="White"
+                CornerRadius="8"
+                HeightRequest="45" />
 
         </VerticalStackLayout>
     </ScrollView>
