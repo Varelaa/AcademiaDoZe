@@ -15,8 +15,9 @@
             <!-- home -->
         </FlyoutItem.Icon>
 
-        <ShellContent 
-            ContentTemplate="{DataTemplate views:DashboardListPage}" 
+        <ShellContent
+            Title="Dashboard"
+            ContentTemplate="{DataTemplate views:DashboardListPage}"
             Route="dashboard" />
     </FlyoutItem>
 
@@ -25,13 +26,14 @@
         <FlyoutItem.Icon>
             <FontImageSource 
                 FontFamily="MaterialIcons" 
-                Glyph="&#xe7f1;" />
-            <!-- location_on -->
+                Glyph="&#xe567;" />
+            <!-- place -->
         </FlyoutItem.Icon>
 
-        <ShellContent 
-            ContentTemplate="{DataTemplate views:LogradouroListPage}" 
-            Route="logradouros" />
+        <ShellContent
+            Title="Logradouros"
+            ContentTemplate="{DataTemplate views:LogradouroListPage}"
+            Route="logradouros-list" />
     </FlyoutItem>
 
     <!-- Configurações -->
@@ -43,8 +45,8 @@
             <!-- settings -->
         </FlyoutItem.Icon>
 
-        <ShellContent 
-            ContentTemplate="{DataTemplate views:ConfigPage}" 
+        <ShellContent
+            ContentTemplate="{DataTemplate views:ConfigPage}"
             Route="configuracoes" />
     </FlyoutItem>
 

@@ -19,13 +19,16 @@ namespace AcademiaDoZe.Infrastructure.Data
     {
         public const int DefaultCommandTimeout = 30;
 
+        // ============================
+        // CRIAR CONEXÃO
+        // ============================
         public static DbConnection CreateConnection(string connectionString, DatabaseType dbType)
         {
             try
             {
                 DbConnection connection = dbType switch
                 {
-                   // DatabaseType.SqlServer => new SqlConnection(connectionString),
+                    DatabaseType.SqlServer => new SqlConnection(connectionString),
                     DatabaseType.MySql => new MySqlConnection(connectionString),
                     _ => throw new InfrastructureException($"SGDB_NAO_SUPORTADO {dbType}")
                 };
@@ -38,6 +41,9 @@ namespace AcademiaDoZe.Infrastructure.Data
             }
         }
 
+        // ============================
+        // CRIAR COMANDO
+        // ============================
         public static DbCommand CreateCommand(string commandText, DbConnection connection, CommandType commandType = CommandType.Text)
         {
             if (connection == null)
@@ -48,10 +54,13 @@ namespace AcademiaDoZe.Infrastructure.Data
 
             try
             {
-                var command = connection.CreateCommand() ?? throw new InfrastructureException("FALHA_CRIAR_COMANDO");
+                var command = connection.CreateCommand()
+                    ?? throw new InfrastructureException("FALHA_CRIAR_COMANDO");
+
                 command.CommandText = commandText;
                 command.CommandType = commandType;
                 command.CommandTimeout = DefaultCommandTimeout;
+
                 return command;
             }
             catch (DbException ex)
@@ -60,6 +69,9 @@ namespace AcademiaDoZe.Infrastructure.Data
             }
         }
 
+        // ============================
+        // CRIAR PARÂMETRO
+        // ============================
         public static DbParameter CreateParameter(string name, object value, DbType dbType, DatabaseType databaseType)
         {
             if (string.IsNullOrWhiteSpace(name))
@@ -69,7 +81,7 @@ namespace AcademiaDoZe.Infrastructure.Data
             {
                 DbParameter parameter = databaseType switch
                 {
-                    //DatabaseType.SqlServer => new SqlParameter(),
+                    DatabaseType.SqlServer => new SqlParameter(),
                     DatabaseType.MySql => new MySqlParameter(),
                     _ => throw new InfrastructureException($"SGDB_NAO_SUPORTADO {databaseType}")
                 };

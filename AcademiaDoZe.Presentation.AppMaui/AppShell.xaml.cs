@@ -1,4 +1,5 @@
 ﻿using AcademiaDoZe.Presentation.AppMaui.Views;
+
 namespace AcademiaDoZe.Presentation.AppMaui
 {
     public partial class AppShell : Shell
@@ -8,13 +9,11 @@ namespace AcademiaDoZe.Presentation.AppMaui
             InitializeComponent();
             RegisterRoutes();
         }
-        // O Routing.RegisterRoute é necessário para que o Shell do MAUI reconheça e permita a navegação
-        // para páginas que não estão diretamente no TabBar ou Flyout,
 
-        // como páginas de detalhe, edição ou cadastro.
         private static void RegisterRoutes()
-
         {
+            // Rota usada pelo LogradouroListViewModel:
+            // await Shell.Current.GoToAsync("logradouro");
             Routing.RegisterRoute("logradouro", typeof(LogradouroPage));
         }
     }

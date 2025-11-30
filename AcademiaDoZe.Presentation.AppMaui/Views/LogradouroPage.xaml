@@ -1,46 +1,56 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<ContentPage 
+<ContentPage
     x:Class="AcademiaDoZe.Presentation.AppMaui.Views.LogradouroPage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:vm="clr-namespace:AcademiaDoZe.Presentation.AppMaui.ViewModels"
-    x:DataType="vm:LogradouroViewModel"
-    Title="{Binding Title}">
+    Title="Cadastro de Logradouro">
 
     <ScrollView>
-        <VerticalStackLayout Spacing="20" Padding="20">
+        <VerticalStackLayout Padding="20" Spacing="12">
 
-            <!-- Campo CEP -->
-            <Entry Placeholder="CEP"
-                   Keyboard="Numeric"
-                   Text="{Binding Logradouro.Cep}" />
+            <!-- CEP -->
+            <Label Text="CEP" FontAttributes="Bold" />
+            <Entry Text="{Binding Logradouro.Cep}" Placeholder="Digite o CEP" />
 
-            <!-- Campo Nome -->
-            <Entry Placeholder="Nome"
-                   Text="{Binding Logradouro.Nome}" />
+            <!-- Nome -->
+            <Label Text="Nome" FontAttributes="Bold" />
+            <Entry Text="{Binding Logradouro.Nome}" Placeholder="Rua, Avenida, etc" />
 
-            <!-- Campo Bairro -->
-            <Entry Placeholder="Bairro"
-                   Text="{Binding Logradouro.Bairro}" />
+            <!-- Bairro -->
+            <Label Text="Bairro" FontAttributes="Bold" />
+            <Entry Text="{Binding Logradouro.Bairro}" Placeholder="Ex: Centro" />
 
-            <!-- Campo Cidade -->
-            <Entry Placeholder="Cidade"
-                   Text="{Binding Logradouro.Cidade}" />
+            <!-- Cidade -->
+            <Label Text="Cidade" FontAttributes="Bold" />
+            <Entry Text="{Binding Logradouro.Cidade}" Placeholder="Ex: São Paulo" />
 
-            <!-- Campo Estado -->
-            <Entry Placeholder="Estado"
-                   Text="{Binding Logradouro.Estado}" />
+            <!-- Estado -->
+            <Label Text="Estado" FontAttributes="Bold" />
+            <Entry Text="{Binding Logradouro.Estado}" Placeholder="SP" MaxLength="2" />
 
-            <!-- Campo País -->
-            <Entry Placeholder="País"
-                   Text="{Binding Logradouro.Pais}" />
+            <!-- País -->
+            <Label Text="País" FontAttributes="Bold" />
+            <Entry Text="{Binding Logradouro.Pais}" Placeholder="Brasil" />
 
-            <!-- Botões Reutilizáveis -->
-            <Button Text="Salvar" 
-                    Style="{StaticResource ButtonPrimary}"
-                    Command="{Binding SaveCommand}"/>
+            <!-- Botão Salvar -->
+            <Button
+                Text="Salvar"
+                Command="{Binding SaveLogradouroCommand}"
+                BackgroundColor="#2196F3"
+                TextColor="White"
+                CornerRadius="8"
+                HeightRequest="45" />
+
+            <!-- Botão Cancelar -->
+            <Button
+                Text="Cancelar"
+                Command="{Binding CancelCommand}"
+                BackgroundColor="#E53935"
+                TextColor="White"
+                CornerRadius="8"
+                HeightRequest="45" />
 
         </VerticalStackLayout>
     </ScrollView>
-
 </ContentPage>

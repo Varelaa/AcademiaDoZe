@@ -1,4 +1,4 @@
-﻿//Gabriel Souza Varela
+﻿// Gabriel Souza Varela
 
 using AcademiaDoZe.Domain.Entities;
 using AcademiaDoZe.Domain.Repositories;
@@ -14,8 +14,6 @@ namespace AcademiaDoZe.Infrastructure.Repositories
     {
         protected readonly string _connectionString;
         protected readonly DatabaseType _databaseType;
-        private DbConnection? _connection;
-        private bool _disposed = false;
 
         protected BaseRepository(string connectionString, DatabaseType databaseType)
         {
@@ -32,17 +30,9 @@ namespace AcademiaDoZe.Infrastructure.Repositories
         {
             try
             {
-                if (_connection == null)
-                {
-                    _connection = DbProvider.CreateConnection(_connectionString, _databaseType);
-                    await _connection.OpenAsync();
-                }
-                else if (_connection.State != ConnectionState.Open)
-                {
-                    await _connection.OpenAsync();
-                }
-
-                return _connection;
+                var connection = DbProvider.CreateConnection(_connectionString, _databaseType);
+                await connection.OpenAsync();
+                return connection;
             }
             catch (DbException ex)
             {
@@ -58,23 +48,13 @@ namespace AcademiaDoZe.Infrastructure.Repositories
 
         protected virtual async ValueTask DisposeAsync(bool disposing)
         {
-            if (!_disposed)
-            {
-                if (disposing && _connection != null)
-                {
-                    await _connection.DisposeAsync();
-                    _connection = null;
-                }
-
-                _disposed = true;
-            }
+            await Task.CompletedTask;
         }
 
         ~BaseRepository()
         {
             DisposeAsync(false).AsTask().GetAwaiter().GetResult();
         }
-
 
         public virtual async Task<TEntity?> ObterPorId(int id)
         {

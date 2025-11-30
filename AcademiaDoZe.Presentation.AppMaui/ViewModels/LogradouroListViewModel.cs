@@ -1,5 +1,8 @@
-﻿using AcademiaDoZe.Application.DTOs;
+﻿// Gabriel Souza Varela
+
+using AcademiaDoZe.Application.DTOs;
 using AcademiaDoZe.Application.Interfaces;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System.Collections.ObjectModel;
 
@@ -7,10 +10,19 @@ namespace AcademiaDoZe.Presentation.AppMaui.ViewModels
 {
     public partial class LogradouroListViewModel : BaseViewModel
     {
-        public ObservableCollection<string> FilterTypes { get; } =
-            new() { "Cidade", "Id", "Cep" };
-
         private readonly ILogradouroService _logradouroService;
+
+        public ObservableCollection<LogradouroDTO> Logradouros { get; } = new();
+
+        // Filtros
+        public List<string> FilterTypes { get; } = new() { "CEP", "Cidade" };
+
+        private string _selectedFilterType = "CEP";
+        public string SelectedFilterType
+        {
+            get => _selectedFilterType;
+            set => SetProperty(ref _selectedFilterType, value);
+        }
 
         private string _searchText = string.Empty;
         public string SearchText
@@ -19,25 +31,11 @@ namespace AcademiaDoZe.Presentation.AppMaui.ViewModels
             set => SetProperty(ref _searchText, value);
         }
 
-        private string _selectedFilterType = "Cidade";
-        public string SelectedFilterType
+        private bool _isRefreshing;
+        public bool IsRefreshing
         {
-            get => _selectedFilterType;
-            set => SetProperty(ref _selectedFilterType, value);
-        }
-
-        private ObservableCollection<LogradouroDTO> _logradouros = new();
-        public ObservableCollection<LogradouroDTO> Logradouros
-        {
-            get => _logradouros;
-            set => SetProperty(ref _logradouros, value);
-        }
-
-        private LogradouroDTO? _selectedLogradouro;
-        public LogradouroDTO? SelectedLogradouro
-        {
-            get => _selectedLogradouro;
-            set => SetProperty(ref _selectedLogradouro, value);
+            get => _isRefreshing;
+            set => SetProperty(ref _isRefreshing, value);
         }
 
         public LogradouroListViewModel(ILogradouroService logradouroService)
@@ -46,142 +44,30 @@ namespace AcademiaDoZe.Presentation.AppMaui.ViewModels
             Title = "Logradouros";
         }
 
-        // ---------------------------------------------------------
-        //  COMMANDS
-        // ---------------------------------------------------------
-
-        [RelayCommand]
-        private async Task AddLogradouroAsync()
+        // =========================================================
+        // MÉTODO QUE A TELA CHAMA NO OnAppearing / INICIALIZAÇÃO
+        // =========================================================
+        public async Task InitializeAsync()
         {
-            try
-            {
-                await Shell.Current.GoToAsync("logradouro");
-            }
-            catch (Exception ex)
-            {
-                await Shell.Current.DisplayAlert("Erro",
-                    $"Erro ao navegar para tela de cadastro: {ex.Message}", "OK");
-            }
-        }
-
-        [RelayCommand]
-        private async Task EditLogradouroAsync(LogradouroDTO logradouro)
-        {
-            try
-            {
-                if (logradouro == null)
-                    return;
-
-                await Shell.Current.GoToAsync($"logradouro?Id={logradouro.Id}");
-            }
-            catch (Exception ex)
-            {
-                await Shell.Current.DisplayAlert("Erro",
-                    $"Erro ao navegar para tela de edição: {ex.Message}", "OK");
-            }
-        }
-
-        [RelayCommand]
-        private async Task RefreshAsync()
-        {
-            IsRefreshing = true;
             await LoadLogradourosAsync();
         }
 
+        // =========================================================
+        // CARREGAR TODOS
+        // Gera LoadLogradourosCommand (usado no code-behind)
+        // =========================================================
         [RelayCommand]
-        private async Task SearchLogradourosAsync()
+        public async Task LoadLogradourosAsync()
         {
-            if (IsBusy)
-                return;
-
             try
             {
                 IsBusy = true;
+                Logradouros.Clear();
 
-                await MainThread.InvokeOnMainThreadAsync(() =>
-                {
-                    Logradouros.Clear();
-                });
+                var lista = await _logradouroService.ObterTodosAsync();
 
-                IEnumerable<LogradouroDTO> resultados = Enumerable.Empty<LogradouroDTO>();
-
-                if (string.IsNullOrWhiteSpace(SearchText))
-                {
-                    resultados = await _logradouroService.ObterTodosAsync()
-                        ?? Enumerable.Empty<LogradouroDTO>();
-                }
-                else if (SelectedFilterType == "Cidade")
-                {
-                    resultados = await _logradouroService.ObterPorCidadeAsync(SearchText)
-                        ?? Enumerable.Empty<LogradouroDTO>();
-                }
-                else if (SelectedFilterType == "Id" && int.TryParse(SearchText, out int id))
-                {
-                    var logradouro = await _logradouroService.ObterPorIdAsync(id);
-
-                    if (logradouro != null)
-                        resultados = new[] { logradouro };
-                }
-                else if (SelectedFilterType == "Cep")
-                {
-                    var logradouro = await _logradouroService.ObterPorCepAsync(SearchText);
-
-                    if (logradouro != null)
-                        resultados = new[] { logradouro };
-                }
-
-                await MainThread.InvokeOnMainThreadAsync(() =>
-                {
-                    foreach (var item in resultados)
-                        Logradouros.Add(item);
-
-                    OnPropertyChanged(nameof(Logradouros));
-                });
-            }
-            catch (Exception ex)
-            {
-                await Shell.Current.DisplayAlert("Erro",
-                    $"Erro ao buscar logradouros: {ex.Message}", "OK");
-            }
-            finally
-            {
-                IsBusy = false;
-            }
-        }
-
-        [RelayCommand]
-        private async Task LoadLogradourosAsync()
-        {
-            if (IsBusy)
-                return;
-
-            try
-            {
-                IsBusy = true;
-
-                await MainThread.InvokeOnMainThreadAsync(() =>
-                {
-                    Logradouros.Clear();
-                    OnPropertyChanged(nameof(Logradouros));
-                });
-
-                var logradourosList = await _logradouroService.ObterTodosAsync();
-
-                if (logradourosList != null)
-                {
-                    await MainThread.InvokeOnMainThreadAsync(() =>
-                    {
-                        foreach (var logradouro in logradourosList)
-                            Logradouros.Add(logradouro);
-
-                        OnPropertyChanged(nameof(Logradouros));
-                    });
-                }
-            }
-            catch (Exception ex)
-            {
-                await Shell.Current.DisplayAlert("Erro",
-                    $"Erro ao carregar logradouros: {ex.Message}", "OK");
+                foreach (var item in lista)
+                    Logradouros.Add(item);
             }
             finally
             {
@@ -190,47 +76,102 @@ namespace AcademiaDoZe.Presentation.AppMaui.ViewModels
             }
         }
 
+        // =========================================================
+        // ATUALIZAR (PULL TO REFRESH)
+        // =========================================================
+        [RelayCommand]
+        private async Task RefreshAsync()
+        {
+            IsRefreshing = true;
+            await LoadLogradourosAsync();
+        }
+
+        // =========================================================
+        // BUSCAR
+        // =========================================================
+        [RelayCommand]
+        private async Task SearchLogradourosAsync()
+        {
+            try
+            {
+                IsBusy = true;
+                Logradouros.Clear();
+
+                IEnumerable<LogradouroDTO> lista = Enumerable.Empty<LogradouroDTO>();
+
+                if (string.IsNullOrWhiteSpace(SearchText))
+                {
+                    lista = await _logradouroService.ObterTodosAsync();
+                }
+                else
+                {
+                    switch (SelectedFilterType)
+                    {
+                        case "CEP":
+                            var item = await _logradouroService.ObterPorCepAsync(SearchText);
+                            if (item != null)
+                                lista = new List<LogradouroDTO> { item };
+                            break;
+
+                        case "Cidade":
+                            lista = await _logradouroService.ObterPorCidadeAsync(SearchText);
+                            break;
+                    }
+                }
+
+                foreach (var l in lista)
+                    Logradouros.Add(l);
+            }
+            finally
+            {
+                IsBusy = false;
+            }
+        }
+
+        // =========================================================
+        // ADICIONAR
+        // Gera AddLogradouroCommand (usado no XAML)
+        // =========================================================
+        [RelayCommand]
+        private async Task AddLogradouroAsync()
+        {
+            await Shell.Current.GoToAsync("logradouro");
+        }
+
+        // =========================================================
+        // EDITAR
+        // Gera EditLogradouroCommand (usado no code-behind)
+        // =========================================================
+        [RelayCommand]
+        private async Task EditLogradouroAsync(LogradouroDTO logradouro)
+        {
+            if (logradouro == null)
+                return;
+
+            await Shell.Current.GoToAsync($"logradouro?Id={logradouro.Id}");
+        }
+
+        // =========================================================
+        // EXCLUIR
+        // Gera DeleteLogradouroCommand (usado no code-behind)
+        // =========================================================
         [RelayCommand]
         private async Task DeleteLogradouroAsync(LogradouroDTO logradouro)
         {
             if (logradouro == null)
                 return;
 
-            bool confirm = await Shell.Current.DisplayAlert(
-                "Confirmar Exclusão",
-                $"Deseja realmente excluir o logradouro {logradouro.Nome}?",
-                "Sim", "Não");
+            bool confirmar = await Shell.Current.DisplayAlert(
+                "Confirmação",
+                $"Deseja realmente excluir o logradouro {logradouro.Cep}?",
+                "Sim",
+                "Não");
 
-            if (!confirm)
+            if (!confirmar)
                 return;
 
-            try
-            {
-                IsBusy = true;
-
-                bool success = await _logradouroService.RemoverAsync(logradouro.Id);
-
-                if (success)
-                {
-                    Logradouros.Remove(logradouro);
-                    await Shell.Current.DisplayAlert("Sucesso",
-                        "Logradouro excluído com sucesso!", "OK");
-                }
-                else
-                {
-                    await Shell.Current.DisplayAlert("Erro",
-                        "Não foi possível excluir o logradouro.", "OK");
-                }
-            }
-            catch (Exception ex)
-            {
-                await Shell.Current.DisplayAlert("Erro",
-                    $"Erro ao excluir logradouro: {ex.Message}", "OK");
-            }
-            finally
-            {
-                IsBusy = false;
-            }
+            await _logradouroService.RemoverAsync(logradouro.Id);
+            Logradouros.Remove(logradouro);
         }
     }
 }

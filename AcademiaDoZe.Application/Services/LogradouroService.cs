@@ -9,16 +9,16 @@ namespace AcademiaDoZe.Application.Services
 {
     public class LogradouroService : ILogradouroService
     {
-        private readonly Func<ILogradouroRepository> _repoFactory;
+        private readonly Func<ILogradouroRepository> _repo;
 
         public LogradouroService(Func<ILogradouroRepository> repoFactory)
         {
-            _repoFactory = repoFactory ?? throw new ArgumentNullException(nameof(repoFactory));
+            _repo = repoFactory ?? throw new ArgumentNullException(nameof(repoFactory));
         }
 
         public async Task<LogradouroDTO> ObterPorIdAsync(int id)
         {
-            var entity = await _repoFactory().ObterPorId(id)
+            var entity = await _repo().ObterPorId(id)
                 ?? throw new KeyNotFoundException($"Logradouro ID {id} não encontrado.");
 
             return entity.ToDto();
@@ -26,7 +26,7 @@ namespace AcademiaDoZe.Application.Services
 
         public async Task<IEnumerable<LogradouroDTO>> ObterTodosAsync()
         {
-            var lista = await _repoFactory().ObterTodos();
+            var lista = await _repo().ObterTodos();
             return lista.Select(l => l.ToDto());
         }
 
@@ -35,21 +35,21 @@ namespace AcademiaDoZe.Application.Services
             // Normaliza CEP antes de qualquer consulta
             dto.Cep = new string(dto.Cep.Where(char.IsDigit).ToArray());
 
-            var existente = await _repoFactory().ObterPorCepAsync(dto.Cep);
+            var existente = await _repo().ObterPorCepAsync(dto.Cep);
             if (existente != null)
                 throw new InvalidOperationException(
                     $"Já existe um logradouro cadastrado com o CEP {dto.Cep} (ID {existente.Id}).");
 
             var entity = dto.ToEntity();
 
-            await _repoFactory().Adicionar(entity);
+            await _repo().Adicionar(entity);
 
             return entity.ToDto();
         }
 
         public async Task<LogradouroDTO> AtualizarAsync(LogradouroDTO dto)
         {
-            var atual = await _repoFactory().ObterPorId(dto.Id)
+            var atual = await _repo().ObterPorId(dto.Id)
                 ?? throw new KeyNotFoundException($"Logradouro ID {dto.Id} não encontrado.");
 
             // Normaliza CEP para comparar
@@ -57,7 +57,7 @@ namespace AcademiaDoZe.Application.Services
 
             if (!string.Equals(atual.Cep, novoCep, StringComparison.OrdinalIgnoreCase))
             {
-                var existente = await _repoFactory().ObterPorCepAsync(novoCep);
+                var existente = await _repo().ObterPorCepAsync(novoCep);
                 if (existente != null && existente.Id != dto.Id)
                     throw new InvalidOperationException(
                         $"O CEP {novoCep} já está em uso pelo logradouro ID {existente.Id}.");
@@ -65,18 +65,18 @@ namespace AcademiaDoZe.Application.Services
 
             var atualizado = atual.UpdateFromDto(dto);
 
-            await _repoFactory().Atualizar(atualizado);
+            await _repo().Atualizar(atualizado);
 
             return atualizado.ToDto();
         }
 
         public async Task<bool> RemoverAsync(int id)
         {
-            var atual = await _repoFactory().ObterPorId(id);
+            var atual = await _repo().ObterPorId(id);
             if (atual == null)
                 return false;
 
-            await _repoFactory().Remover(id);
+            await _repo().Remover(id);
             return true;
         }
 
@@ -87,7 +87,7 @@ namespace AcademiaDoZe.Application.Services
 
             cep = new string(cep.Where(char.IsDigit).ToArray());
 
-            var entity = await _repoFactory().ObterPorCepAsync(cep);
+            var entity = await _repo().ObterPorCepAsync(cep);
             return entity?.ToDto() ?? null!;
         }
 
@@ -98,7 +98,7 @@ namespace AcademiaDoZe.Application.Services
 
             cidade = cidade.Trim();
 
-            var lista = await _repoFactory().ObterPorCidadeAsync(cidade);
+            var lista = await _repo().ObterPorCidadeAsync(cidade);
             return lista.Select(l => l.ToDto());
         }
     }

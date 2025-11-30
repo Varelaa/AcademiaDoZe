@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="AcademiaDoZe.Presentation.AppMaui.Views.ColaboradorPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    Title="Colaborador">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="10">
+
+            <Label Text="CPF" />
+            <Entry Text="{Binding Colaborador.Cpf}" Keyboard="Numeric" />
+
+            <Label Text="Nome" />
+            <Entry Text="{Binding Colaborador.Nome}" />
+
+            <Label Text="Telefone" />
+            <Entry Text="{Binding Colaborador.Telefone}" Keyboard="Telephone" />
+
+            <Label Text="Email" />
+            <Entry Text="{Binding Colaborador.Email}" Keyboard="Email" />
+
+            <Label Text="Data de Nascimento" />
+            <DatePicker Date="{Binding DataNascimentoDate}" />
+
+            <Label Text="Data de Admissão" />
+            <DatePicker Date="{Binding DataAdmissaoDate}" />
+
+            <Label Text="Número" />
+            <Entry Text="{Binding Colaborador.Numero}" />
+
+            <Label Text="Complemento" />
+            <Entry Text="{Binding Colaborador.Complemento}" />
+
+            <!-- Botão Salvar -->
+            <Button
+                Text="Salvar"
+                Command="{Binding SaveCommand}"
+                BackgroundColor="#2196F3"
+                TextColor="White"
+                CornerRadius="8"
+                HeightRequest="45" />
+
+            <!-- Botão Cancelar -->
+            <Button
+                Text="Cancelar"
+                Command="{Binding CancelCommand}"
+                BackgroundColor="#E53935"
+                TextColor="White"
+                CornerRadius="8"
+                HeightRequest="45" />
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

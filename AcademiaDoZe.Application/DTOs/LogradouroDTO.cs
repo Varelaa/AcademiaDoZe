@@ -1,15 +1,15 @@
-﻿//Gabriel Souza Varela
+﻿// Gabriel Souza Varela
 
 namespace AcademiaDoZe.Application.DTOs
 {
     public class LogradouroDTO
     {
         public int Id { get; set; }
-        public required string Cep { get; set; }
-        public required string Nome { get; set; }
-        public required string Bairro { get; set; }
-        public required string Cidade { get; set; }
-        public required string Estado { get; set; }
-        public required string Pais { get; set; }
+        public string Cep { get; set; } = string.Empty;
+        public string Nome { get; set; } = string.Empty;
+        public string Bairro { get; set; } = string.Empty;
+        public string Cidade { get; set; } = string.Empty;
+        public string Estado { get; set; } = string.Empty;
+        public string Pais { get; set; } = string.Empty;
     }
 }

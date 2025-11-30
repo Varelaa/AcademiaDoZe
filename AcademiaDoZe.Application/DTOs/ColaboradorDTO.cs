@@ -1,4 +1,4 @@
-﻿//Gabriel Souza Varela
+﻿// Gabriel Souza Varela
 
 using AcademiaDoZe.Domain.Enums;
 
@@ -7,19 +7,29 @@ namespace AcademiaDoZe.Application.DTOs
     public class ColaboradorDTO
     {
         public int Id { get; set; }
-        public required string Nome { get; set; }
-        public required string Cpf { get; set; }
-        public required DateOnly DataNascimento { get; set; }
-        public required string Telefone { get; set; }
+
+        // Campos básicos usados na tela
+        public string Nome { get; set; } = string.Empty;
+        public string Cpf { get; set; } = string.Empty;
+        public string Telefone { get; set; } = string.Empty;
         public string? Email { get; set; }
-        public required LogradouroDTO Endereco { get; set; }
-        public required string Numero { get; set; }
+
+        // Como você tem DatePicker na tela, precisa iniciar com data válida
+        public DateOnly DataNascimento { get; set; } = DateOnly.FromDateTime(DateTime.Now);
+        public DateOnly DataAdmissao { get; set; } = DateOnly.FromDateTime(DateTime.Now);
+
+        // Endereço NÃO está na tela → precisa ser opcional!
+        public LogradouroDTO? Endereco { get; set; }
+
+        public string Numero { get; set; } = string.Empty;
         public string? Complemento { get; set; }
+
+        // Ainda não usados
         public string? Senha { get; set; }
         public ArquivoDTO? Foto { get; set; }
 
-        public required DateOnly DataAdmissao { get; set; }
-        public required EColaboradorTipo Tipo { get; set; }
-        public required EColaboradorVinculo Vinculo { get; set; }
+        // Tipo e Vínculo ainda não estão na UI → valores padrão
+        public EColaboradorTipo Tipo { get; set; } = EColaboradorTipo.Instrutor;
+        public EColaboradorVinculo Vinculo { get; set; } = EColaboradorVinculo.CLT;
     }
 }
