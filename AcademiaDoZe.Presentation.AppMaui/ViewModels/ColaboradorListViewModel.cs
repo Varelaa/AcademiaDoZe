@@ -1,50 +1,45 @@
-﻿// Gabriel Souza Varela
-
-using AcademiaDoZe.Application.DTOs;
+﻿using AcademiaDoZe.Application.DTOs;
 using AcademiaDoZe.Application.Interfaces;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System.Collections.ObjectModel;
+using AcademiaDoZe.Presentation.AppMaui.Views;
+
 
 namespace AcademiaDoZe.Presentation.AppMaui.ViewModels
 {
     public partial class ColaboradorListViewModel : BaseViewModel
     {
-        private readonly IColaboradorService _colaboradorService;
+        private readonly IColaboradorService _service;
 
-        [ObservableProperty]
-        private ObservableCollection<ColaboradorDTO> colaboradores = new();
+        public ObservableCollection<ColaboradorDTO> Colaboradores { get; } = new();
 
-        public ColaboradorListViewModel(IColaboradorService colaboradorService)
+        public ColaboradorListViewModel(IColaboradorService service)
         {
-            _colaboradorService = colaboradorService;
+            _service = service;
             Title = "Colaboradores";
         }
 
+        [RelayCommand]
         public async Task InitializeAsync()
         {
             await LoadAsync();
         }
 
         [RelayCommand]
-        private async Task LoadAsync()
+        public async Task LoadAsync()
         {
-            if (IsBusy)
-                return;
+            if (IsBusy) return;
 
             try
             {
                 IsBusy = true;
+
                 Colaboradores.Clear();
+                var lista = await _service.ObterTodosAsync();
 
-                var itens = await _colaboradorService.ObterTodosAsync();
-
-                foreach (var item in itens)
-                    Colaboradores.Add(item);
-            }
-            catch (Exception ex)
-            {
-                await Shell.Current.DisplayAlert("Erro", $"Erro ao carregar colaboradores: {ex.Message}", "OK");
+                foreach (var c in lista)
+                    Colaboradores.Add(c);
             }
             finally
             {
@@ -53,23 +48,28 @@ namespace AcademiaDoZe.Presentation.AppMaui.ViewModels
         }
 
         [RelayCommand]
-        private async Task NovoAsync()
+        public async Task EditarAsync(ColaboradorDTO colaborador)
         {
-            await Shell.Current.GoToAsync(nameof(Views.ColaboradorPage));
+            if (colaborador is null) return;
+
+            await Shell.Current.GoToAsync($"{nameof(ColaboradorPage)}?Id={colaborador.Id}");
         }
 
         [RelayCommand]
-        private async Task EditarAsync(ColaboradorDTO? colaborador)
+        public async Task ExcluirAsync(ColaboradorDTO colaborador)
         {
-            if (colaborador is null)
+            if (colaborador is null) return;
+
+            bool confirmar = await Shell.Current.DisplayAlert(
+                "Excluir",
+                $"Deseja excluir {colaborador.Nome}?",
+                "Sim", "Não");
+
+            if (!confirmar)
                 return;
 
-            var parametros = new Dictionary<string, object>
-            {
-                { "Id", colaborador.Id }
-            };
-
-            await Shell.Current.GoToAsync(nameof(Views.ColaboradorPage), parametros);
+            await _service.RemoverAsync(colaborador.Id);
+            await LoadAsync();
         }
     }
 }

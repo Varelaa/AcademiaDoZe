@@ -1,25 +1,21 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage
     x:Class="AcademiaDoZe.Presentation.AppMaui.Views.ColaboradorListPage"
-    x:Name="ColaboradorListPageRoot"
+    x:Name="PageRoot"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:viewmodels="clr-namespace:AcademiaDoZe.Presentation.AppMaui.ViewModels"
     Title="Colaboradores">
 
-    <!-- BARRA SUPERIOR COM BOTÃO NOVO -->
     <ContentPage.ToolbarItems>
-        <ToolbarItem 
-        Text="Novo" 
-        Clicked="OnNovoClicked" />
+        <ToolbarItem Text="Novo" Clicked="OnNovoClicked" />
     </ContentPage.ToolbarItems>
 
-
-    <RefreshView 
+    <RefreshView
         IsRefreshing="{Binding IsBusy}"
         Command="{Binding LoadAsyncCommand}">
 
-        <CollectionView 
+        <CollectionView
             ItemsSource="{Binding Colaboradores}"
             SelectionMode="None">
 
@@ -30,61 +26,42 @@
                         <SwipeView.RightItems>
                             <SwipeItems Mode="Reveal">
 
-                                <!-- Editar -->
                                 <SwipeItem
                                     Text="Editar"
                                     BackgroundColor="#0277BD"
-                                    IconImageSource="edit.png"
-                                    Command="{Binding BindingContext.EditarAsyncCommand, 
-                                              Source={x:Reference ColaboradorListPageRoot}}"
+                                    Command="{Binding BindingContext.EditarAsyncCommand, Source={x:Reference PageRoot}}"
                                     CommandParameter="{Binding .}" />
 
-                                <!-- Excluir -->
                                 <SwipeItem
                                     Text="Excluir"
                                     BackgroundColor="#C62828"
-                                    IconImageSource="delete.png"
-                                    Command="{Binding BindingContext.ExcluirAsyncCommand, 
-                                              Source={x:Reference ColaboradorListPageRoot}}"
+                                    Command="{Binding BindingContext.ExcluirAsyncCommand, Source={x:Reference PageRoot}}"
                                     CommandParameter="{Binding .}" />
 
                             </SwipeItems>
                         </SwipeView.RightItems>
 
                         <Grid Padding="14" ColumnDefinitions="*,Auto">
-
-                            <!-- Dados principais -->
                             <VerticalStackLayout>
-                                <Label Text="{Binding Nome}" 
-                                       FontSize="18"
-                                       FontAttributes="Bold" />
-
-                                <Label Text="{Binding Cpf}" 
-                                       FontSize="14" 
-                                       TextColor="Gray" />
-
-                                <Label Text="{Binding Telefone}" 
-                                       FontSize="14" 
-                                       TextColor="Gray" />
+                                <Label Text="{Binding Nome}" FontSize="18" FontAttributes="Bold"/>
+                                <Label Text="{Binding Cpf}" FontSize="14" TextColor="Gray"/>
+                                <Label Text="{Binding Telefone}" FontSize="14" TextColor="Gray"/>
                             </VerticalStackLayout>
 
-                            <!-- Botão Editar visível (opcional) -->
-                            <ImageButton 
+                            <ImageButton
                                 Grid.Column="1"
                                 Source="edit.png"
-                                WidthRequest="28"
-                                HeightRequest="28"
                                 BackgroundColor="Transparent"
-                                Command="{Binding BindingContext.EditarAsyncCommand, 
-                                          Source={x:Reference ColaboradorListPageRoot}}"
+                                Command="{Binding BindingContext.EditarAsyncCommand, Source={x:Reference PageRoot}}"
                                 CommandParameter="{Binding .}" />
                         </Grid>
-
                     </SwipeView>
+
                 </DataTemplate>
             </CollectionView.ItemTemplate>
 
         </CollectionView>
+
     </RefreshView>
 
 </ContentPage>

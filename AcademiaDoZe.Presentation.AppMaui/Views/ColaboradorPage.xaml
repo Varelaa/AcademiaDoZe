@@ -32,23 +32,24 @@
             <Label Text="Complemento" />
             <Entry Text="{Binding Colaborador.Complemento}" />
 
-            <!-- Botão Salvar -->
-            <Button
-                Text="Salvar"
-                Command="{Binding SaveCommand}"
-                BackgroundColor="#2196F3"
-                TextColor="White"
-                CornerRadius="8"
-                HeightRequest="45" />
+            <!-- BOTÃO SALVAR -->
+            <!-- BOTÃO SALVAR -->
+            <Button Text="Salvar"
+                    Clicked="OnSalvarClicked"
+                    BackgroundColor="#2196F3"
+                    TextColor="White"
+                    CornerRadius="8"
+                    HeightRequest="45" />
 
-            <!-- Botão Cancelar -->
-            <Button
-                Text="Cancelar"
-                Command="{Binding CancelCommand}"
-                BackgroundColor="#E53935"
-                TextColor="White"
-                CornerRadius="8"
-                HeightRequest="45" />
+
+            <!-- BOTÃO CANCELAR -->
+            <Button Text="Cancelar"
+                    Clicked="OnCancelarClicked"
+                    BackgroundColor="#E53935"
+                    TextColor="White"
+                    CornerRadius="8"
+                    HeightRequest="45" />
+
 
         </VerticalStackLayout>
     </ScrollView>

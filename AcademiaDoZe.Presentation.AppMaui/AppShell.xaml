@@ -3,51 +3,39 @@
     x:Class="AcademiaDoZe.Presentation.AppMaui.AppShell"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:views="clr-namespace:AcademiaDoZe.Presentation.AppMaui.Views"
-    Title="Academia do Zé">
+    xmlns:views="clr-namespace:AcademiaDoZe.Presentation.AppMaui.Views">
 
-    <!-- Dashboard -->
     <FlyoutItem Title="Dashboard" Route="dashboard">
         <FlyoutItem.Icon>
-            <FontImageSource 
-                FontFamily="MaterialIcons" 
-                Glyph="&#xe88a;" />
-            <!-- home -->
+            <FontImageSource FontFamily="MaterialIcons" Glyph="&#xe871;" />
         </FlyoutItem.Icon>
-
-        <ShellContent
-            Title="Dashboard"
-            ContentTemplate="{DataTemplate views:DashboardListPage}"
-            Route="dashboard" />
+        <ShellContent ContentTemplate="{DataTemplate views:DashboardListPage}" />
     </FlyoutItem>
 
-    <!-- Logradouros -->
     <FlyoutItem Title="Logradouros" Route="logradouros">
         <FlyoutItem.Icon>
-            <FontImageSource 
-                FontFamily="MaterialIcons" 
-                Glyph="&#xe567;" />
-            <!-- place -->
+            <FontImageSource FontFamily="MaterialIcons" Glyph="&#xe55f;" />
         </FlyoutItem.Icon>
-
-        <ShellContent
-            Title="Logradouros"
-            ContentTemplate="{DataTemplate views:LogradouroListPage}"
-            Route="logradouros-list" />
+        <ShellContent ContentTemplate="{DataTemplate views:LogradouroListPage}" />
     </FlyoutItem>
 
-    <!-- Configurações -->
-    <FlyoutItem Title="Configurações" Route="configuracoes">
+    <!-- 🔥 ITEM DO COLABORADOR (O QUE PRECISA VOLTAR) -->
+    <FlyoutItem Title="Colaboradores" Route="colaboradores">
         <FlyoutItem.Icon>
-            <FontImageSource 
-                FontFamily="MaterialIcons" 
-                Glyph="&#xe8b8;" />
-            <!-- settings -->
+            <FontImageSource FontFamily="MaterialIcons" Glyph="&#xe7fb;" />
+            <!-- ícone: group -->
         </FlyoutItem.Icon>
 
         <ShellContent
-            ContentTemplate="{DataTemplate views:ConfigPage}"
-            Route="configuracoes" />
+            Title="Colaboradores"
+            ContentTemplate="{DataTemplate views:ColaboradorListPage}" />
+    </FlyoutItem>
+
+    <FlyoutItem Title="Configurações" Route="config">
+        <FlyoutItem.Icon>
+            <FontImageSource FontFamily="MaterialIcons" Glyph="&#xe8b8;" />
+        </FlyoutItem.Icon>
+        <ShellContent ContentTemplate="{DataTemplate views:ConfigPage}" />
     </FlyoutItem>
 
 </Shell>

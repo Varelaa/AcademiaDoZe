@@ -25,37 +25,48 @@ namespace AcademiaDoZe.Presentation.AppMaui
                 });
 
             // ===============================
-            // CONFIGURAÇÃO DE SERVICES BÁSICOS
+            // CONFIGURAÇÃO BÁSICA
             // ===============================
             ConfigurationHelper.ConfigureServices(builder.Services);
 
-            // -------------------------------
-            // CONFIGURAÇÃO DA INFRAESTRUTURA
-            // -------------------------------
-
+            // ===============================
+            // BANCO DE DADOS
+            // ===============================
             var connectionString =
                 "Server=192.168.100.24;Port=3306;Database=db_academia_do_ze;Uid=root;Pwd=root;";
             var databaseType = DatabaseType.MySql;
 
-            // Repositórios via extensão AddInfrastructure (Aluno, Logradouro, Matricula, etc.)
+            // Repositórios (Aluno, Logradouro, Matricula, Colaborador)
             builder.Services.AddInfrastructure(connectionString, databaseType);
 
-            // Somente o service de LOGRADOURO por enquanto
+            // ===============================
+            // SERVICES
+            // ===============================
             builder.Services.AddScoped<ILogradouroService, LogradouroService>();
+            builder.Services.AddScoped<IColaboradorService, ColaboradorService>();
 
             // ===============================
             // VIEWMODELS
             // ===============================
             builder.Services.AddTransient<DashboardListViewModel>();
+
             builder.Services.AddTransient<LogradouroListViewModel>();
             builder.Services.AddTransient<LogradouroViewModel>();
+
+            builder.Services.AddTransient<ColaboradorListViewModel>();
+            builder.Services.AddTransient<ColaboradorViewModel>();
 
             // ===============================
             // VIEWS
             // ===============================
             builder.Services.AddTransient<DashboardListPage>();
+
             builder.Services.AddTransient<LogradouroListPage>();
             builder.Services.AddTransient<LogradouroPage>();
+
+            builder.Services.AddTransient<ColaboradorListPage>();
+            builder.Services.AddTransient<ColaboradorPage>();
+
             builder.Services.AddTransient<ConfigPage>();
 
 #if DEBUG
